@@ -2,7 +2,7 @@
   "network": "sepolia",
   "chainId": 11155111,
   "contractName": "VotingSystem",
-  "address": "0x5f07647B377E87adDa1433796B74238f8a65B26c",
+  "address": "0x27D45F85F300d4169D01cA1561388583cF8253D9",
   "deployer": "0x372ee50901D62F3b314936C9302b19F8F477716E",
   "title": "基于智能合约的去中心化电子投票演示",
   "candidates": [
@@ -10,9 +10,9 @@
     "方案 B：传统中心化投票系统",
     "方案 C：混合式投票系统"
   ],
-  "votingEndTime": 1778637597,
+  "votingEndTime": 1778652571,
   "merkleRoot": "0xb84d167dee14c531723adc7c8625c29224727496b7a19329eda9cbc6d15c4a21",
-  "deploymentTransactionHash": "0x76fc0bd79a3f5752ee23a6fc22666cd8ca53b6c7d57e88af4b30c71ed352822a",
-  "deploymentGasUsed": "915874",
-  "deployedAt": "2026-05-13T01:30:15.099Z"
+  "deploymentTransactionHash": "0x06779ad4e5a6bb7ff72501d842d18310817489c3def8c46becb5436c8344d77b",
+  "deploymentGasUsed": "903205",
+  "deployedAt": "2026-05-13T05:39:49.687Z"
 }

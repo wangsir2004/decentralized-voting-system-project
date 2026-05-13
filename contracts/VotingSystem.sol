@@ -6,8 +6,8 @@ import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProo
 contract VotingSystem {
     // 投票主题、截止时间和 Merkle 根公开暴露，方便前端直接读取链上配置。
     string public title;
-    uint256 public votingEndTime;
-    bytes32 public merkleRoot;
+    uint256 public immutable votingEndTime;
+    bytes32 public immutable merkleRoot;
 
     // 候选项与票数按相同索引保存，避免额外映射带来的遍历成本。
     string[] private candidates;
