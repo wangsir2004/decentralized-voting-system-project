@@ -1,0 +1,28 @@
+{
+  "merkleRoot": "0xb84d167dee14c531723adc7c8625c29224727496b7a19329eda9cbc6d15c4a21",
+  "voters": [
+    {
+      "address": "0x372ee50901D62F3b314936C9302b19F8F477716E",
+      "leaf": "0x088a6152115444eeb6b502d2f35d430b8c08e1fe7ce5c2cfbbf75da53bd49644",
+      "proof": [
+        "0x251f609849576268eba545f6e03820514987e741264d618df2a2c3a55fe9cb1b",
+        "0xb15549c747a1728c1c83b68d40b6a7f67a22fd4bf2cba5fd309c5c1037b80f27"
+      ]
+    },
+    {
+      "address": "0x223c397328A746dF817aAE4958a83Df9A7c1Cb97",
+      "leaf": "0x251f609849576268eba545f6e03820514987e741264d618df2a2c3a55fe9cb1b",
+      "proof": [
+        "0x088a6152115444eeb6b502d2f35d430b8c08e1fe7ce5c2cfbbf75da53bd49644",
+        "0xb15549c747a1728c1c83b68d40b6a7f67a22fd4bf2cba5fd309c5c1037b80f27"
+      ]
+    },
+    {
+      "address": "0x253f4a33c6e1920bA081200394B6EC10a729696B",
+      "leaf": "0xb15549c747a1728c1c83b68d40b6a7f67a22fd4bf2cba5fd309c5c1037b80f27",
+      "proof": [
+        "0x3066e5b088b5f2bbee9c4a66f370df895ab9c3d9db1406596b5c74d6f7e4db2f"
+      ]
+    }
+  ]
+}

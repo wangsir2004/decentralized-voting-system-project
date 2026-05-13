@@ -1,0 +1,59 @@
+﻿Pages: 19
+Paragraphs: 421
+PageWidth=595.35 PageHeight=842
+Margins top=72 bottom=72 left=70.9 right=51.05
+HeaderDistance=42.55 FooterDistance=49.6
+--- first 120 paragraphs ---
+[2] style=正文 font=楷体_GB2312 size=26 bold=0 align=1 first=0 left=21 before=7.8 after=3.1 line=12 :: 
+[4] style=正文文本 font=黑体 size=42 bold=0 align=1 first=-0.1 left=0 before=0 after=0 line=12 :: 毕业设计说明书
+[5] style=正文 font=黑体 size=18 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=28 :: （黑体初号居中）
+[6] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 题       目：            （楷体四号）
+[7] style=正文 font=宋体 size=15 bold=0 align=3 first=0 left=0 before=0 after=0 line=40 :: Times New Roman二号字体，居中加粗
+[8] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 学       院： 使用学校公布的学院名称（楷体四号）
+[9] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 专       业： 参考教务系统中专业班级名（楷体四号）
+[10] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 作       者：     姓名   学号（楷体四号）
+[11] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 指 导 教 师：     姓名   职称（楷体四号）
+[12] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 校 外 导 师：    姓名  职称（若无请删除此表格行）
+[13] style=正文 font= size=9999999 bold=9999999 align=3 first=45.2 left=0 before=0 after=0 line=40 :: 评   阅  者：    姓名   职称  （楷体四号）
+[15] style=正文 font= size=9999999 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=30 :: 二〇二六 年 六 月   日 （楷体小四号）
+[17] style=正文 font=宋体 size=16 bold=-1 align=1 first=0 left=0 before=0 after=0 line=12 :: 原创性声明（宋体三号）
+[19] style=正文 font=宋体 size=12 bold=0 align=0 first=24 left=0 before=0 after=0 line=20 :: 本人郑重声明：所呈交的毕业设计说明书，是本人在导师指导下，进行研究工作所取得的成果。除文中已经注明引用的内容外，本设计不包含任何他人或集体已经发表的作品内容，也不包含本人为获得其他学位而使用过的材料。对本设计所涉及的研究工作做出贡献的其他个人或集体，均已在文中以明确方式标明。本毕业设计说明书原创性声明的法律责任由本人承担。
+[21] style=正文 font=宋体 size=12 bold=0 align=3 first=48 left=0 before=0 after=0 line=20 :: 作者签名：（手写签名）          日期：     年   月    日
+[26] style=正文 font=宋体 size=16 bold=-1 align=1 first=0 left=0 before=0 after=0 line=12 :: 关于毕业设计说明书版权使用授权的说明（宋体三号）
+[28] style=正文 font=宋体 size=12 bold=0 align=0 first=24 left=0 before=0 after=4.65 line=20 :: 本人完全了解河北工业大学关于收集、保存、使用毕业设计说明书的以下规定：本科生在校攻读学位期间毕业设计工作的知识产权单位属河北工业大学，学校有权采用影印、缩印、扫描、数字化或其它手段保存毕业设计说明书；学校有权提供本设计全文或者部分内容的阅览服务；学校有权将毕业设计说明书的全部或部分内容编入有关数据库进行检索、交流；学校有权向国家有关部门或者机构送交毕业设计说明书的复印件和电子版。
+[29] style=正文 font=宋体 size=12 bold=0 align=0 first=24 left=0 before=0 after=4.65 line=20 :: （保密的毕业设计说明书在解密后适用本授权说明）
+[31] style=正文 font=宋体 size=12 bold=0 align=1 first=24 left=0 before=0 after=4.65 line=20 :: 作  者  签  名： （手写签名）              日期：    年    月   日
+[32] style=正文 font=宋体 size=12 bold=0 align=1 first=24 left=0 before=0 after=4.65 line=20 :: 导  师  签  名： （手写签名）              日期：    年    月   日
+[37] style=正文 font=黑体 size=18 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=15 :: 摘　　要
+[38] style=正文 font=黑体 size=18 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=15 :: （黑体小二居中）
+[39] style=正文 font=宋体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 摘要应能高度概括地陈述本设计说明书的主要内容（本论文的研究目的、方法、成果、结论及创新点等等），语言凝练、叙述客观、观点明确、思路清晰，能反映该论文核心内容，不含图表、注释。英文摘要应与中文摘要相对应，采用第三人称介绍内容，叙述基本时态为一般现在时。中文摘要要求200~300字，英文摘要以200～300个词为宜（小四号宋体，1.25倍行距）。
+[40] style=论文正文 font=宋体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 关键词是供检索用的主题词条，关键词数量一般3～5个，关键词行与摘要内容之间空一行，每个关键词之间用分号（；）间隔，最后一个关键词后不加标点。“关键词”三字加粗。如有可能，尽量采用《汉语主题词表》等词表提供的规范词。中英文关键词含义应保持一致。
+[41] style=强调 font=宋体 size=12 bold=-1 align=3 first=0 left=0 before=0 after=0 line=15 :: 本模板中各章节仅用于演示撰写规范格式等相关要求，其章节各级标题与内容仅供参考，不作为学生毕业设计（论文）的大纲或内容要求。
+[43] style=强调 font=宋体 size=12 bold=9999999 align=3 first=0 left=0 before=0 after=0 line=15 :: 关键词：撰写规范；文字处理；排版技巧；毕业论文
+[54] style=正文 font=方正小标宋简体 size=18 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=15 :: ABSTRACT
+[55] style=正文 font=方正小标宋简体 size=18 bold=0 align=1 first=0 left=0 before=0 after=4.65 line=15 :: （Times New Roman小二号）
+[56] style=正文 font=宋体 size=12 bold=0 align=3 first=24.1 left=0 before=0 after=0 line=15 :: 英文摘要部分的标题“ABSTRACT”，字体选用Times New Roman小二号，上下各空一行。摘要正文用Times New Roman小四号，行间距为1.25倍。标点符号用英文标点符号。“Key words”与中文摘要部分的关键词对应，最后一个关键词后不加标点。“Key words”加粗，每个关键词之间用分号间隔。关键词除缩写和特定词外首字母无需大写。论文摘要的中文版与英文版文字内容要对应。
+[58] style=正文 font=宋体 size=12 bold=9999999 align=3 first=0 left=0 before=0 after=0 line=15 :: Key words：writing guidelines；word processing；typography skills；undergraduate thesis
+[84] style=正文 font=黑体 size=18 bold=0 align=1 first=0 left=0 before=0 after=0 line=15 :: 目　　录
+[85] style=正文 font=宋体 size=12 bold=0 align=1 first=0 left=0 before=0 after=0 line=15 :: （黑体小二号，之间空两个汉字符，上下各空一行。）
+[87] style=超链接 font=黑体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 第一章	绪论	1
+[88] style=超链接 font= size=12 bold=0 align=3 first=0 left=21 before=0 after=0 line=15 :: 1.1  正文	1
+[89] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.1.1  标题部分	1
+[90] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.1.2  文字部分	1
+[91] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.1.3  脚注	2
+[92] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.1.4  参考文献在正文中的标注	2
+[93] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.1.5  分页	2
+[94] style=超链接 font= size=12 bold=0 align=3 first=0 left=21 before=0 after=0 line=15 :: 1.2  图表设置	3
+[95] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.2.1  图	3
+[96] style=超链接 font= size=12 bold=0 align=3 first=0 left=42 before=0 after=0 line=15 :: 1.2.2  表	4
+[97] style=超链接 font= size=12 bold=0 align=3 first=0 left=21 before=0 after=0 line=15 :: 1.3  公式	5
+[98] style=超链接 font=黑体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 参考文献	8
+[99] style=超链接 font=黑体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 附录A	9
+[100] style=超链接 font=黑体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 攻读学位期间所取得的相关科研成果	10
+[101] style=超链接 font=黑体 size=12 bold=0 align=3 first=0 left=0 before=0 after=0 line=15 :: 致    谢	11
+[103] style=正文 font=宋体 size=10.5 bold=0 align=3 first=21 left=0 before=0 after=3.1 line=12 :: （目录中内容行间距均为1.25倍，所有页码右对齐，页码采用Times New Roman小四号字体。各章目录用黑体小四号，一级标题和二级标题目录用宋体小四号（目录中不体现三级标题），逐级左缩进2汉字符。章节序号与题名之间均空一个汉字符。）
+[115] style=正文 font=黑体 size=18 bold=0 align=1 first=-72 left=72 before=6 after=6 line=15 :: 绪论
+[117] style=正文 font=黑体 size=16 bold=0 align=0 first=0 left=0 before=12 after=12 line=15 :: 1.1　正文
+[118] style=正文 font=宋体 size=14 bold=-1 align=3 first=0 left=0 before=6 after=6 line=15 :: 1.1.1　标题部分
+[119] style=正文 font=宋体 size=12 bold=0 align=3 first=24.1 left=0 before=0 after=0 line=15 :: 标题要重点突出，简明扼要。格式如下：
+[120] style=正文 font=宋体 size=12 bold=0 align=3 first=24.1 left=0 before=0 after=0 line=15 :: ( 各章标题，例如：“第一章  绪论”
