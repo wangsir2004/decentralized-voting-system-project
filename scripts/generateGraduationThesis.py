@@ -3,9 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from docx import Document
-from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_ALIGN_VERTICAL, WD_TABLE_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Inches, Pt, RGBColor
@@ -41,10 +40,42 @@ def set_run_font(run, east_asia: str = "宋体", ascii_font: str = "Times New Ro
 def set_paragraph_format(paragraph, first_line: bool = True):
     paragraph.paragraph_format.line_spacing = 1.25
     paragraph.paragraph_format.space_before = Pt(0)
-    paragraph.paragraph_format.space_after = Pt(0)
+    paragraph.paragraph_format.space_after = Pt(2)
     if first_line:
         paragraph.paragraph_format.first_line_indent = Pt(21)
     paragraph.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+
+def add_field(run, instruction: str) -> None:
+    begin = OxmlElement("w:fldChar")
+    begin.set(qn("w:fldCharType"), "begin")
+    instr = OxmlElement("w:instrText")
+    instr.set(qn("xml:space"), "preserve")
+    instr.text = instruction
+    separate = OxmlElement("w:fldChar")
+    separate.set(qn("w:fldCharType"), "separate")
+    end = OxmlElement("w:fldChar")
+    end.set(qn("w:fldCharType"), "end")
+    run._r.append(begin)
+    run._r.append(instr)
+    run._r.append(separate)
+    run._r.append(end)
+
+
+def add_paragraph_bottom_border(paragraph, color: str = "9AA6B2") -> None:
+    p_pr = paragraph._p.get_or_add_pPr()
+    borders = p_pr.find(qn("w:pBdr"))
+    if borders is None:
+        borders = OxmlElement("w:pBdr")
+        p_pr.append(borders)
+    bottom = borders.find(qn("w:bottom"))
+    if bottom is None:
+        bottom = OxmlElement("w:bottom")
+        borders.append(bottom)
+    bottom.set(qn("w:val"), "single")
+    bottom.set(qn("w:sz"), "4")
+    bottom.set(qn("w:space"), "1")
+    bottom.set(qn("w:color"), color)
 
 
 def clear_document(doc: Document) -> None:
@@ -59,10 +90,13 @@ def setup_document(doc: Document) -> None:
     section = doc.sections[0]
     section.page_width = Cm(21)
     section.page_height = Cm(29.7)
-    section.top_margin = Cm(2.6)
-    section.bottom_margin = Cm(2.4)
-    section.left_margin = Cm(2.8)
-    section.right_margin = Cm(2.6)
+    section.top_margin = Cm(3.4)
+    section.bottom_margin = Cm(2.5)
+    section.left_margin = Cm(2.7)
+    section.right_margin = Cm(2.7)
+    section.header_distance = Cm(2.5)
+    section.footer_distance = Cm(2.0)
+    section.different_first_page_header_footer = True
 
     styles = doc.styles
     normal = styles["Normal"]
@@ -80,6 +114,23 @@ def setup_document(doc: Document) -> None:
     styles["Heading 1"].font.size = Pt(18)
     styles["Heading 2"].font.size = Pt(16)
     styles["Heading 3"].font.size = Pt(12)
+
+    for header in (section.header, section.first_page_header):
+        p = header.paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.line_spacing = 1.0
+        p.paragraph_format.space_after = Pt(2)
+        p.text = ""
+        run = p.add_run("河北工业大学2026届本科毕业设计说明书")
+        set_run_font(run, east_asia="宋体", size=9)
+        add_paragraph_bottom_border(p)
+
+    footer = section.footer.paragraphs[0]
+    footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    footer.paragraph_format.line_spacing = 1.0
+    run = footer.add_run()
+    set_run_font(run, size=9)
+    add_field(run, "PAGE")
 
 
 def add_center(doc: Document, text: str, size: int = 10.5, bold: bool = False, font_name: str = "宋体"):
@@ -115,6 +166,10 @@ def add_mono(doc: Document, text: str):
         run = p.add_run(line)
         set_run_font(run, east_asia="Consolas", ascii_font="Consolas", size=9.5)
         run.add_break()
+    p_pr = p._p.get_or_add_pPr()
+    shade = OxmlElement("w:shd")
+    shade.set(qn("w:fill"), "F5F7FA")
+    p_pr.append(shade)
     return p
 
 
@@ -125,6 +180,7 @@ def add_chapter(doc: Document, text: str):
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_before = Pt(12)
     p.paragraph_format.space_after = Pt(12)
+    p.paragraph_format.keep_with_next = True
     for run in p.runs:
         set_run_font(run, east_asia="黑体", size=18, bold=True)
     return p
@@ -135,6 +191,7 @@ def add_section_heading(doc: Document, text: str, level: int = 2):
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p.paragraph_format.space_before = Pt(12 if level == 2 else 6)
     p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.keep_with_next = True
     for run in p.runs:
         set_run_font(run, east_asia="黑体" if level == 2 else "宋体", size=16 if level == 2 else 12, bold=True)
     return p
@@ -144,14 +201,32 @@ def add_caption(doc: Document, text: str):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.line_spacing = 1.25
+    p.paragraph_format.space_before = Pt(2)
     p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.keep_with_next = True
     run = p.add_run(text)
     set_run_font(run, size=9)
     return p
 
 
+def set_cell_margins(cell, top: int = 80, start: int = 120, bottom: int = 80, end: int = 120):
+    tc_pr = cell._tc.get_or_add_tcPr()
+    tc_mar = tc_pr.first_child_found_in("w:tcMar")
+    if tc_mar is None:
+        tc_mar = OxmlElement("w:tcMar")
+        tc_pr.append(tc_mar)
+    for margin, value in (("top", top), ("start", start), ("bottom", bottom), ("end", end)):
+        node = tc_mar.find(qn(f"w:{margin}"))
+        if node is None:
+            node = OxmlElement(f"w:{margin}")
+            tc_mar.append(node)
+        node.set(qn("w:w"), str(value))
+        node.set(qn("w:type"), "dxa")
+
+
 def set_cell(cell, text: str, bold: bool = False, align: WD_ALIGN_PARAGRAPH = WD_ALIGN_PARAGRAPH.CENTER):
     cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+    set_cell_margins(cell)
     cell.text = ""
     p = cell.paragraphs[0]
     p.alignment = align
@@ -184,12 +259,12 @@ def set_table_borders(table):
 def add_table(doc: Document, headers: list[str], rows: list[list[str]], widths: list[float] | None = None):
     table = doc.add_table(rows=1, cols=len(headers))
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    table.autofit = True
+    table.autofit = widths is None
     set_table_borders(table)
     for i, header in enumerate(headers):
         set_cell(table.rows[0].cells[i], header, bold=True)
         shade = OxmlElement("w:shd")
-        shade.set(qn("w:fill"), "E8EEF2")
+        shade.set(qn("w:fill"), "DDE7EF")
         table.rows[0].cells[i]._tc.get_or_add_tcPr().append(shade)
     for row in rows:
         cells = table.add_row().cells
@@ -200,7 +275,8 @@ def add_table(doc: Document, headers: list[str], rows: list[list[str]], widths: 
         for row in table.rows:
             for idx, width in enumerate(widths):
                 row.cells[idx].width = Inches(width)
-    doc.add_paragraph()
+    spacer = doc.add_paragraph()
+    spacer.paragraph_format.space_after = Pt(4)
     return table
 
 
@@ -210,6 +286,8 @@ def add_picture(doc: Document, image_path: Path, caption: str, width: float = 5.
         return
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.space_before = Pt(4)
+    p.paragraph_format.space_after = Pt(2)
     run = p.add_run()
     run.add_picture(str(image_path), width=Inches(width))
     add_caption(doc, caption)
@@ -264,59 +342,64 @@ def add_abstracts(doc: Document):
 def add_toc(doc: Document):
     add_center(doc, "目　　录", size=18, bold=True, font_name="黑体")
     toc_lines = [
-        "第一章  绪论",
-        "1.1  研究背景与意义",
-        "1.2  国内外研究现状",
-        "1.3  研究目标与主要内容",
-        "1.4  论文结构安排",
-        "1.5  技术路线与可行性分析",
-        "第二章  相关技术基础",
-        "2.1  Ethereum 与智能合约",
-        "2.2  Solidity、Hardhat 与 OpenZeppelin",
-        "2.3  ECDSA 签名与地址机制",
-        "2.4  Keccak-256 与 Merkle Tree",
-        "2.5  DApp 前端与钱包交互",
-        "2.6  技术选型依据",
-        "第三章  系统需求分析",
-        "3.1  角色分析",
-        "3.2  功能需求",
-        "3.3  非功能需求",
-        "3.4  威胁模型与设计边界",
-        "3.5  典型用例分析",
-        "第四章  系统总体设计",
-        "4.1  总体架构设计",
-        "4.2  业务流程设计",
-        "4.3  投票交易流程设计",
-        "4.4  合约状态与接口设计",
-        "4.5  前端模块设计",
-        "4.6  数据一致性设计",
-        "4.7  本章小结",
-        "第五章  系统详细实现",
-        "5.1  开发环境与工程结构",
-        "5.2  智能合约实现",
-        "5.3  白名单与 Merkle Proof 实现",
-        "5.4  前端 DApp 实现",
-        "5.5  部署与前端配置同步",
-        "5.6  异常处理与交互细节",
-        "第六章  测试、安全审计与部署分析",
-        "6.1  测试环境与测试策略",
-        "6.2  自动化测试结果",
-        "6.3  Gas 消耗分析",
-        "6.4  安全审计与风险分析",
-        "6.5  Sepolia 测试网部署结果",
-        "6.6  可复现性与结果评价",
-        "第七章  总结与展望",
-        "7.3  工程伦理与合规说明",
-        "参考文献",
-        "附录A  关键命令与运行证据",
-        "致谢",
+        ("第一章  绪论", 1, "7"),
+        ("1.1  研究背景与意义", 2, "7"),
+        ("1.2  国内外研究现状", 2, "7"),
+        ("1.3  研究目标与主要内容", 2, "8"),
+        ("1.4  论文结构安排", 2, "8"),
+        ("1.5  技术路线与可行性分析", 2, "8"),
+        ("第二章  相关技术基础", 1, "9"),
+        ("2.1  Ethereum 与智能合约", 2, "9"),
+        ("2.2  Solidity、Hardhat 与 OpenZeppelin", 2, "9"),
+        ("2.3  ECDSA 签名与地址机制", 2, "9"),
+        ("2.4  Keccak-256 与 Merkle Tree", 2, "10"),
+        ("2.5  DApp 前端与钱包交互", 2, "11"),
+        ("2.6  技术选型依据", 2, "11"),
+        ("第三章  系统需求分析", 1, "13"),
+        ("3.1  角色分析", 2, "13"),
+        ("3.2  功能需求", 2, "13"),
+        ("3.3  非功能需求", 2, "13"),
+        ("3.4  威胁模型与设计边界", 2, "14"),
+        ("3.5  典型用例分析", 2, "14"),
+        ("3.6  本章小结", 2, "15"),
+        ("第四章  系统总体设计", 1, "16"),
+        ("4.1  总体架构设计", 2, "16"),
+        ("4.2  业务流程设计", 2, "16"),
+        ("4.3  投票交易流程设计", 2, "17"),
+        ("4.4  合约状态与接口设计", 2, "18"),
+        ("4.5  前端模块设计", 2, "18"),
+        ("4.6  数据一致性设计", 2, "18"),
+        ("4.7  本章小结", 2, "19"),
+        ("第五章  系统详细实现", 1, "20"),
+        ("5.1  开发环境与工程结构", 2, "20"),
+        ("5.2  智能合约实现", 2, "20"),
+        ("5.3  白名单与 Merkle Proof 实现", 2, "21"),
+        ("5.4  前端 DApp 实现", 2, "21"),
+        ("5.5  部署与前端配置同步", 2, "23"),
+        ("5.6  异常处理与交互细节", 2, "24"),
+        ("第六章  测试、安全审计与部署分析", 1, "25"),
+        ("6.1  测试环境与测试策略", 2, "25"),
+        ("6.2  自动化测试结果", 2, "25"),
+        ("6.3  Gas 消耗分析", 2, "26"),
+        ("6.4  安全审计与风险分析", 2, "27"),
+        ("6.5  Sepolia 测试网部署结果", 2, "28"),
+        ("6.6  可复现性与结果评价", 2, "30"),
+        ("第七章  总结与展望", 1, "32"),
+        ("7.1  工作总结", 2, "32"),
+        ("7.2  不足与展望", 2, "32"),
+        ("7.3  工程伦理与合规说明", 2, "32"),
+        ("参考文献", 1, "34"),
+        ("附录A  关键命令与运行证据", 1, "35"),
+        ("致谢", 1, "36"),
     ]
-    for line in toc_lines:
+    for label, level, page in toc_lines:
         p = doc.add_paragraph()
         p.paragraph_format.line_spacing = 1.25
-        p.paragraph_format.left_indent = Pt(21 if line[0].isdigit() else 0)
-        run = p.add_run(line)
-        set_run_font(run, east_asia="黑体" if line.startswith(("第一", "第二", "第三", "第四", "第五", "第六", "第七", "参考", "附录", "致谢")) else "宋体", size=10.5)
+        p.paragraph_format.space_after = Pt(0)
+        p.paragraph_format.left_indent = Pt(18 if level == 2 else 0)
+        p.paragraph_format.tab_stops.add_tab_stop(Cm(15.4), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+        run = p.add_run(f"{label}\t{page}")
+        set_run_font(run, east_asia="黑体" if level == 1 else "宋体", size=10.5, bold=level == 1)
 
 
 def add_body(doc: Document):
@@ -416,6 +499,8 @@ def add_body(doc: Document):
         ["提交投票", "钱包连接，地址在白名单内，投票未截止", "选择候选项、签名交易、等待回执", "非白名单、重复投票、超时投票均回滚"],
         ["查询结果", "合约已部署", "调用 getResults 或查看前端统计", "RPC 异常时展示错误提示"],
     ], [1.0, 1.7, 2.2, 1.7])
+    add_section_heading(doc, "3.6  本章小结")
+    add_para(doc, "本章从角色、功能、非功能、威胁边界和典型用例五个角度明确了系统需求。需求分析表明，本文系统的核心不在于替代真实政务选举，而在于通过智能合约验证投票规则公开执行、资格控制可校验、计票结果可追溯这一技术路径。后续总体设计和详细实现均围绕这些需求展开，重点保证白名单验证、重复投票限制、投票窗口控制和部署配置同步。")
 
     add_chapter(doc, "第四章  系统总体设计")
     add_section_heading(doc, "4.1  总体架构设计")
