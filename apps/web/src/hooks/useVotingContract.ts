@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { BrowserProvider, Contract } from "ethers";
+import { BrowserProvider, Contract, JsonRpcProvider } from "ethers";
 import { assertMatchingMerkleRoot, loadWhitelist, type DeploymentConfig } from "../contracts/deployment";
 import { formatWalletError } from "../utils/display";
 
@@ -33,6 +33,10 @@ const initialState: VotingState = {
   error: ""
 };
 
+const READONLY_RPC_BY_CHAIN_ID: Record<number, string> = {
+  11155111: "https://ethereum-sepolia-rpc.publicnode.com"
+};
+
 export function useVotingContract(deployment: DeploymentConfig | null, account: string) {
   const [state, setState] = useState<VotingState>(initialState);
 
@@ -50,8 +54,15 @@ export function useVotingContract(deployment: DeploymentConfig | null, account: 
         ? whitelist.voters.find((item) => item.address.toLowerCase() === account.toLowerCase())
         : undefined;
 
-      if (!window.ethereum) {
-        // 没有钱包时仍展示部署候选项和本地白名单状态，方便用户理解当前投票配置。
+      const readOnlyRpcUrl = READONLY_RPC_BY_CHAIN_ID[deployment.chainId];
+      const provider = window.ethereum
+        ? new BrowserProvider(window.ethereum)
+        : readOnlyRpcUrl
+          ? new JsonRpcProvider(readOnlyRpcUrl, deployment.chainId)
+          : null;
+
+      if (!provider) {
+        // 没有钱包且缺少只读 RPC 时仍展示部署候选项和本地白名单状态。
         setState((current) => ({
           ...current,
           candidates: deployment.candidates,
@@ -68,7 +79,6 @@ export function useVotingContract(deployment: DeploymentConfig | null, account: 
         return;
       }
 
-      const provider = new BrowserProvider(window.ethereum);
       const contract = new Contract(deployment.address, deployment.abi, provider);
       // 读操作使用 provider，不需要用户签名，也不会弹出钱包确认。
       const [names, rawCounts] = await contract.getResults();
@@ -86,7 +96,7 @@ export function useVotingContract(deployment: DeploymentConfig | null, account: 
         leaf: entry?.leaf ?? "",
         whitelistSize: whitelist.voters.length,
         isLoading: false,
-        error: ""
+        error: window.ethereum ? "" : "未检测到浏览器钱包，当前以只读模式展示链上投票结果。"
       }));
     } catch (error) {
       setState((current) => ({
