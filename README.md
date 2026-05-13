@@ -20,8 +20,11 @@
 - [系统设计规格](./docs/superpowers/specs/2026-05-04-decentralized-voting-system-design.md)
 - [实施计划](./docs/superpowers/plans/2026-05-04-decentralized-voting-system.md)
 - [算法与安全分析笔记](./docs/thesis/algorithm-notes.md)
+- [Slither 智能合约审计报告](./docs/security/slither-audit.md)
+- [敏捷迭代与 Git 记录](./docs/process/agile-iteration-log.md)
+- [方法要求完成度对照表](./docs/process/method-compliance-checklist.md)
 - [人工测试清单](./docs/testing/manual-test-checklist.md)
-- [Sepolia 部署记录模板](./docs/deployments/sepolia.md)
+- [Sepolia 部署记录](./docs/deployments/sepolia.md)
 
 ## 本地开发
 
@@ -49,8 +52,9 @@ npm run test:gas
 
 当前 Gas 参考数据来自 `npm run test:gas`：
 
-- `vote` 平均约 `77,880` gas。
-- `VotingSystem` 部署约 `869,715` gas。
+- `vote` 平均约 `73,661` gas。
+- `VotingSystem` 本地部署约 `767,754` gas。
+- Sepolia 最新部署交易消耗 `903,205` gas。
 
 ### 本地链部署
 
@@ -89,3 +93,13 @@ npm run export:frontend -- --network sepolia
 ```
 
 部署完成后，将真实合约地址、部署交易 Hash、Gas 数据和 Etherscan 链接记录到 `docs/deployments/sepolia.md`。
+
+## 安全审计
+
+本项目使用 Slither 进行智能合约静态分析：
+
+```bash
+slither . --filter-paths "node_modules|artifacts|cache"
+```
+
+审计结论和风险解释见 `docs/security/slither-audit.md`。

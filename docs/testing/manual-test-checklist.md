@@ -24,6 +24,7 @@
 - [ ] `npm run compile` 可以完成合约编译。
 - [ ] `npm test` 显示全部合约测试通过。
 - [ ] `npm run test:gas` 输出 Gas 报告。
+- [ ] `slither . --filter-paths "node_modules|artifacts|cache"` 输出审计结果。
 - [ ] `npm run deploy:local` 可以在本地 Hardhat 网络部署合约。
 - [ ] `npm run export:frontend -- --network localhost` 可以生成前端部署配置。
 
@@ -33,4 +34,5 @@
 - [ ] 保存部署交易 Hash。
 - [ ] 保存至少一笔成功投票交易 Hash。
 - [ ] 记录部署和投票的 Gas 消耗。
+- [ ] 保存 Slither 审计结果。
 - [ ] 截图保存钱包连接、投票提交、结果图表和区块浏览器页面。
