@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from docx import Document
+from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_ALIGN_VERTICAL, WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER
 from docx.oxml import OxmlElement
@@ -27,6 +28,7 @@ ADVISOR = "王立鹏"
 ADVISOR_TITLE = "讲师"
 REVIEWER = "闫文杰"
 REVIEWER_TITLE = "副教授"
+HEADER_TEXT = "河北工业大学2026届本科毕业设计说明书"
 
 
 def set_run_font(run, east_asia: str = "宋体", ascii_font: str = "Times New Roman", size: int | None = 10.5, bold: bool = False):
@@ -78,6 +80,66 @@ def add_paragraph_bottom_border(paragraph, color: str = "9AA6B2") -> None:
     bottom.set(qn("w:color"), color)
 
 
+def clear_story(story) -> None:
+    for paragraph in story.paragraphs:
+        paragraph.text = ""
+
+
+def add_header_text(header) -> None:
+    clear_story(header)
+    p = header.paragraphs[0]
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.line_spacing = 1.0
+    p.paragraph_format.space_after = Pt(2)
+    run = p.add_run(HEADER_TEXT)
+    set_run_font(run, east_asia="宋体", size=9)
+    add_paragraph_bottom_border(p)
+
+
+def add_footer_page_number(footer) -> None:
+    clear_story(footer)
+    p = footer.paragraphs[0]
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.line_spacing = 1.0
+    run = p.add_run()
+    set_run_font(run, size=9)
+    add_field(run, "PAGE")
+
+
+def configure_section(
+    section,
+    *,
+    top: float,
+    bottom: float,
+    left: float,
+    right: float,
+    header_distance: float,
+    footer_distance: float,
+    different_first: bool = False,
+    page_number: bool = False,
+) -> None:
+    section.page_width = Cm(21)
+    section.page_height = Cm(29.7)
+    section.top_margin = Cm(top)
+    section.bottom_margin = Cm(bottom)
+    section.left_margin = Cm(left)
+    section.right_margin = Cm(right)
+    section.header_distance = Cm(header_distance)
+    section.footer_distance = Cm(footer_distance)
+    section.different_first_page_header_footer = different_first
+
+    for story in (section.header, section.footer, section.first_page_header, section.first_page_footer):
+        story.is_linked_to_previous = False
+        clear_story(story)
+
+    add_header_text(section.header)
+    if different_first:
+        clear_story(section.first_page_header)
+
+    if page_number:
+        add_footer_page_number(section.footer)
+
+
 def clear_document(doc: Document) -> None:
     body = doc._body._element
     for child in list(body):
@@ -88,15 +150,17 @@ def clear_document(doc: Document) -> None:
 
 def setup_document(doc: Document) -> None:
     section = doc.sections[0]
-    section.page_width = Cm(21)
-    section.page_height = Cm(29.7)
-    section.top_margin = Cm(3.4)
-    section.bottom_margin = Cm(2.5)
-    section.left_margin = Cm(2.7)
-    section.right_margin = Cm(2.7)
-    section.header_distance = Cm(2.5)
-    section.footer_distance = Cm(2.0)
-    section.different_first_page_header_footer = True
+    configure_section(
+        section,
+        top=2.54,
+        bottom=2.54,
+        left=2.5,
+        right=1.8,
+        header_distance=1.5,
+        footer_distance=1.75,
+        different_first=True,
+        page_number=False,
+    )
 
     styles = doc.styles
     normal = styles["Normal"]
@@ -107,30 +171,44 @@ def setup_document(doc: Document) -> None:
     for style_name in ["Heading 1", "Heading 2", "Heading 3"]:
         style = styles[style_name]
         style.font.name = "Times New Roman"
-        style._element.rPr.rFonts.set(qn("w:eastAsia"), "黑体" if style_name != "Heading 3" else "宋体")
+        style._element.rPr.rFonts.set(qn("w:eastAsia"), "黑体")
         style.font.color.rgb = RGBColor(0x00, 0x00, 0x00)
-        style.font.bold = style_name != "Heading 3"
+        style.font.bold = None
 
-    styles["Heading 1"].font.size = Pt(18)
-    styles["Heading 2"].font.size = Pt(16)
+    styles["Heading 1"].font.name = "Arial"
+    styles["Heading 2"].font.name = "Arial"
+    styles["Heading 3"].font.name = "Arial"
+    styles["Heading 1"].font.size = Pt(15)
+    styles["Heading 2"].font.size = Pt(14)
     styles["Heading 3"].font.size = Pt(12)
 
-    for header in (section.header, section.first_page_header):
-        p = header.paragraphs[0]
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.line_spacing = 1.0
-        p.paragraph_format.space_after = Pt(2)
-        p.text = ""
-        run = p.add_run("河北工业大学2026届本科毕业设计说明书")
-        set_run_font(run, east_asia="宋体", size=9)
-        add_paragraph_bottom_border(p)
 
-    footer = section.footer.paragraphs[0]
-    footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    footer.paragraph_format.line_spacing = 1.0
-    run = footer.add_run()
-    set_run_font(run, size=9)
-    add_field(run, "PAGE")
+def start_declaration_section(doc: Document) -> None:
+    section = doc.add_section(WD_SECTION.NEW_PAGE)
+    configure_section(
+        section,
+        top=3.4,
+        bottom=2.5,
+        left=2.7,
+        right=2.7,
+        header_distance=1.5,
+        footer_distance=1.75,
+        page_number=False,
+    )
+
+
+def start_main_section(doc: Document) -> None:
+    section = doc.add_section(WD_SECTION.NEW_PAGE)
+    configure_section(
+        section,
+        top=3.4,
+        bottom=2.5,
+        left=2.7,
+        right=2.7,
+        header_distance=2.5,
+        footer_distance=2.2,
+        page_number=True,
+    )
 
 
 def add_center(doc: Document, text: str, size: int = 10.5, bold: bool = False, font_name: str = "宋体"):
@@ -173,8 +251,8 @@ def add_mono(doc: Document, text: str):
     return p
 
 
-def add_chapter(doc: Document, text: str):
-    if len(doc.paragraphs) > 0:
+def add_chapter(doc: Document, text: str, *, break_before: bool = True):
+    if break_before and len(doc.paragraphs) > 0:
         doc.add_page_break()
     p = doc.add_heading(text, level=1)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -182,7 +260,7 @@ def add_chapter(doc: Document, text: str):
     p.paragraph_format.space_after = Pt(12)
     p.paragraph_format.keep_with_next = True
     for run in p.runs:
-        set_run_font(run, east_asia="黑体", size=18, bold=True)
+        set_run_font(run, east_asia="黑体", ascii_font="Arial", size=15, bold=True)
     return p
 
 
@@ -193,7 +271,7 @@ def add_section_heading(doc: Document, text: str, level: int = 2):
     p.paragraph_format.space_after = Pt(6)
     p.paragraph_format.keep_with_next = True
     for run in p.runs:
-        set_run_font(run, east_asia="黑体" if level == 2 else "宋体", size=16 if level == 2 else 12, bold=True)
+        set_run_font(run, east_asia="黑体", ascii_font="Arial", size=14 if level == 2 else 12, bold=True)
     return p
 
 
@@ -296,18 +374,18 @@ def add_picture(doc: Document, image_path: Path, caption: str, width: float = 5.
 def add_cover(doc: Document):
     for _ in range(3):
         doc.add_paragraph()
-    add_center(doc, "毕业设计说明书", size=28, bold=True, font_name="黑体")
+    add_center(doc, "毕业设计说明书", size=38, bold=False, font_name="方正大标宋简体")
     doc.add_paragraph()
-    add_center(doc, f"题       目：{TITLE}", size=14, font_name="楷体")
+    add_center(doc, "题       目：   基于 Solidity 智能合约与 Ethereum 测试网", size=14, font_name="楷体")
+    add_center(doc, "去中心化电子投票系统设计与实现", size=14, font_name="楷体")
     add_center(doc, f"学       院：{COLLEGE}", size=14, font_name="楷体")
     add_center(doc, f"专       业：{MAJOR}", size=14, font_name="楷体")
-    add_center(doc, f"作       者：{AUTHOR}  学号 {STUDENT_ID}  {CLASS_NAME}", size=14, font_name="楷体")
-    add_center(doc, f"指 导 教 师：{ADVISOR}  {ADVISOR_TITLE}", size=14, font_name="楷体")
-    add_center(doc, f"评   阅  者：{REVIEWER}  {REVIEWER_TITLE}", size=14, font_name="楷体")
+    add_center(doc, f"作       者：姓名 {AUTHOR}  学号 {STUDENT_ID}", size=14, font_name="楷体")
+    add_center(doc, f"指 导 教 师：姓名 {ADVISOR}  职称 {ADVISOR_TITLE}", size=14, font_name="楷体")
+    add_center(doc, f"评   阅  者：姓名 {REVIEWER}  职称 {REVIEWER_TITLE}", size=14, font_name="楷体")
     for _ in range(7):
         doc.add_paragraph()
     add_center(doc, "二〇二六 年 六 月", size=12, font_name="楷体")
-    doc.add_page_break()
 
 
 def add_declarations(doc: Document):
@@ -322,7 +400,6 @@ def add_declarations(doc: Document):
     doc.add_paragraph()
     add_para(doc, "作  者  签  名：                 日期：      年    月    日", first_line=False)
     add_para(doc, "导  师  签  名：                 日期：      年    月    日", first_line=False)
-    doc.add_page_break()
 
 
 def add_abstracts(doc: Document):
@@ -341,69 +418,15 @@ def add_abstracts(doc: Document):
 
 def add_toc(doc: Document):
     add_center(doc, "目　　录", size=18, bold=True, font_name="黑体")
-    toc_lines = [
-        ("第一章  绪论", 1, "7"),
-        ("1.1  研究背景与意义", 2, "7"),
-        ("1.2  国内外研究现状", 2, "7"),
-        ("1.3  研究目标与主要内容", 2, "8"),
-        ("1.4  论文结构安排", 2, "8"),
-        ("1.5  技术路线与可行性分析", 2, "8"),
-        ("第二章  相关技术基础", 1, "9"),
-        ("2.1  Ethereum 与智能合约", 2, "9"),
-        ("2.2  Solidity、Hardhat 与 OpenZeppelin", 2, "9"),
-        ("2.3  ECDSA 签名与地址机制", 2, "9"),
-        ("2.4  Keccak-256 与 Merkle Tree", 2, "10"),
-        ("2.5  DApp 前端与钱包交互", 2, "11"),
-        ("2.6  技术选型依据", 2, "11"),
-        ("第三章  系统需求分析", 1, "13"),
-        ("3.1  角色分析", 2, "13"),
-        ("3.2  功能需求", 2, "13"),
-        ("3.3  非功能需求", 2, "13"),
-        ("3.4  威胁模型与设计边界", 2, "14"),
-        ("3.5  典型用例分析", 2, "14"),
-        ("3.6  本章小结", 2, "15"),
-        ("第四章  系统总体设计", 1, "16"),
-        ("4.1  总体架构设计", 2, "16"),
-        ("4.2  业务流程设计", 2, "16"),
-        ("4.3  投票交易流程设计", 2, "17"),
-        ("4.4  合约状态与接口设计", 2, "18"),
-        ("4.5  前端模块设计", 2, "18"),
-        ("4.6  数据一致性设计", 2, "18"),
-        ("4.7  本章小结", 2, "19"),
-        ("第五章  系统详细实现", 1, "20"),
-        ("5.1  开发环境与工程结构", 2, "20"),
-        ("5.2  智能合约实现", 2, "20"),
-        ("5.3  白名单与 Merkle Proof 实现", 2, "21"),
-        ("5.4  前端 DApp 实现", 2, "21"),
-        ("5.5  部署与前端配置同步", 2, "23"),
-        ("5.6  异常处理与交互细节", 2, "24"),
-        ("第六章  测试、安全审计与部署分析", 1, "25"),
-        ("6.1  测试环境与测试策略", 2, "25"),
-        ("6.2  自动化测试结果", 2, "25"),
-        ("6.3  Gas 消耗分析", 2, "26"),
-        ("6.4  安全审计与风险分析", 2, "27"),
-        ("6.5  Sepolia 测试网部署结果", 2, "28"),
-        ("6.6  可复现性与结果评价", 2, "30"),
-        ("第七章  总结与展望", 1, "32"),
-        ("7.1  工作总结", 2, "32"),
-        ("7.2  不足与展望", 2, "32"),
-        ("7.3  工程伦理与合规说明", 2, "32"),
-        ("参考文献", 1, "34"),
-        ("附录A  关键命令与运行证据", 1, "35"),
-        ("致谢", 1, "36"),
-    ]
-    for label, level, page in toc_lines:
-        p = doc.add_paragraph()
-        p.paragraph_format.line_spacing = 1.25
-        p.paragraph_format.space_after = Pt(0)
-        p.paragraph_format.left_indent = Pt(18 if level == 2 else 0)
-        p.paragraph_format.tab_stops.add_tab_stop(Cm(15.4), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
-        run = p.add_run(f"{label}\t{page}")
-        set_run_font(run, east_asia="黑体" if level == 1 else "宋体", size=10.5, bold=level == 1)
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.25
+    p.paragraph_format.space_after = Pt(0)
+    run = p.add_run()
+    add_field(run, r'TOC \o "1-3" \h \z \u')
 
 
 def add_body(doc: Document):
-    add_chapter(doc, "第一章  绪论")
+    add_chapter(doc, "第一章  绪论", break_before=False)
     add_section_heading(doc, "1.1  研究背景与意义")
     add_para(doc, "电子投票是信息化治理、组织决策和在线协作中的重要基础能力。与纸质投票相比，电子投票能够降低人工计票成本，提高结果统计效率，并支持远程参与。然而，传统电子投票系统通常以中心化服务器作为唯一可信执行主体，选民名单、投票状态和计票结果均由服务端数据库保存。当系统管理员权限过大、服务器遭受攻击或日志记录不完整时，投票过程可能难以被外部独立验证。")
     add_para(doc, "区块链技术通过分布式账本、密码学签名和不可篡改的交易记录，为投票系统提供了新的实现思路。将投票规则写入智能合约后，候选项、资格校验、重复投票限制和计票逻辑可以在链上按照公开代码自动执行。任何观察者都可以根据合约地址、交易 Hash 和事件日志复核投票过程，从而降低对中心化平台的单点信任依赖。")
@@ -685,7 +708,9 @@ def main() -> None:
     doc = Document()
     setup_document(doc)
     add_cover(doc)
+    start_declaration_section(doc)
     add_declarations(doc)
+    start_main_section(doc)
     add_abstracts(doc)
     add_toc(doc)
     add_body(doc)
