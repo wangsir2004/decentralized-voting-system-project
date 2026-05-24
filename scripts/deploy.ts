@@ -44,8 +44,8 @@ async function main() {
   const candidates = validateCandidates(JSON.parse(fs.readFileSync(candidatesPath, "utf8")) as string[]);
   const merkleRoot = validateMerkleRoot(whitelist.merkleRoot);
   const now = Math.floor(Date.now() / 1000);
-  // 默认投票窗口为 30 分钟，满足毕业设计演示时的短周期测试需求。
-  const votingEndTime = now + 30 * 60;
+  // 默认投票窗口为 3 天，便于公网部署后留出充分的远程演示和测试时间。
+  const votingEndTime = now + 3 * 24 * 60 * 60;
   const title = "基于智能合约的去中心化电子投票演示";
 
   const VotingSystem = await ethers.getContractFactory("VotingSystem");

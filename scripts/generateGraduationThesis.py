@@ -405,13 +405,13 @@ def add_declarations(doc: Document):
 def add_abstracts(doc: Document):
     add_center(doc, "摘　　要", size=18, bold=True, font_name="黑体")
     add_para(doc, "随着在线治理、数字化协同和远程办公场景不断扩展，电子投票系统需要在可用性、透明性、结果可复核和安全性之间取得平衡。传统中心化电子投票系统通常由单一服务端保存选民状态和计票结果，容易面临单点故障、内部人为干预、过程追溯困难和结果公信力不足等问题。针对上述问题，本文设计并实现了一种基于 Solidity 智能合约与 Ethereum Sepolia 测试网的去中心化电子投票系统。系统以 VotingSystem 智能合约承载投票主题、候选项、投票时间、白名单资格校验、防重复投票和链上计票等核心逻辑；采用 Merkle Tree 保存白名单根以降低链上存储成本；使用 React、Vite、TypeScript、Ethers.js 和 MetaMask 构建前端 DApp，实现钱包连接、资格证明读取、投票提交、交易回执展示和实时结果查询。")
-    add_para(doc, "本文完成了需求分析、系统设计、合约实现、前端开发、自动化测试、Gas 消耗分析、安全审计和 Sepolia 测试网部署。测试结果显示，系统自动化测试共 24 个用例全部通过；本地部署 Gas 为 767,754，vote 方法平均 Gas 为 73,661；最新 Sepolia 部署合约地址为 0x6772e0193eAAA77cB89d135188f09e339C4dE66A，并完成了一笔真实投票交易。Slither 审计结果仅提示与投票截止时间相关的 timestamp 风险，该风险属于可解释的业务边界。实践结果表明，系统能够实现地址级资格控制、链上公开计票和结果可追溯，为小规模电子投票场景提供了一种可运行、可验证的实现方案。")
+    add_para(doc, "本文完成了需求分析、系统设计、合约实现、前端开发、自动化测试、Gas 消耗分析、安全审计和 Sepolia 测试网部署。测试结果显示，系统自动化测试共 24 个用例全部通过；本地部署 Gas 为 767,754，vote 方法平均 Gas 为 73,661；最新 Sepolia 部署合约地址为 0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b，投票窗口约为 3 天。Slither 审计结果仅提示与投票截止时间相关的 timestamp 风险，该风险属于可解释的业务边界。实践结果表明，系统能够实现地址级资格控制、链上公开计票和结果可追溯，为小规模电子投票场景提供了一种可运行、可验证的实现方案。")
     add_para(doc, "关键词：去中心化投票；智能合约；Solidity；Merkle Tree；Ethereum；DApp", first_line=False, bold_prefix="关键词：")
     doc.add_page_break()
 
     add_center(doc, "ABSTRACT", size=18, bold=True, font_name="Times New Roman")
     add_para(doc, "With the expansion of online governance, digital collaboration and remote working scenarios, electronic voting systems need to balance usability, transparency, verifiability and security. Traditional centralized electronic voting systems usually store voter states and tallying results on a single server, which may lead to single point of failure, internal manipulation, weak process traceability and insufficient public trust. To address these problems, this thesis designs and implements a decentralized electronic voting system based on Solidity smart contracts and the Ethereum Sepolia test network. The VotingSystem smart contract is used to manage the voting title, candidates, voting period, whitelist verification, duplicate-vote prevention and on-chain tallying. A Merkle Tree whitelist is adopted so that only the Merkle root is stored on chain, reducing storage overhead. The front-end DApp is implemented with React, Vite, TypeScript, Ethers.js and MetaMask, supporting wallet connection, proof loading, vote submission, transaction receipt display and real-time result query.")
-    add_para(doc, "The work covers requirement analysis, system design, smart contract implementation, front-end development, automated testing, gas consumption analysis, security auditing and deployment on Sepolia. The automated test suite contains 24 passed cases. The local deployment consumes 767,754 gas, while the average gas consumption of the vote method is 73,661. The latest deployed Sepolia contract address is 0x6772e0193eAAA77cB89d135188f09e339C4dE66A, and one real voting transaction has been submitted successfully. Slither reports only timestamp-related warnings for the voting deadline, which are treated as acceptable business constraints. The results show that the system can provide address-level eligibility control, transparent on-chain tallying and traceable voting evidence, offering an executable and verifiable prototype for small-scale electronic voting scenarios.")
+    add_para(doc, "The work covers requirement analysis, system design, smart contract implementation, front-end development, automated testing, gas consumption analysis, security auditing and deployment on Sepolia. The automated test suite contains 24 passed cases. The local deployment consumes 767,754 gas, while the average gas consumption of the vote method is 73,661. The latest deployed Sepolia contract address is 0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b, with a voting window of about three days. Slither reports only timestamp-related warnings for the voting deadline, which are treated as acceptable business constraints. The results show that the system can provide address-level eligibility control, transparent on-chain tallying and traceable voting evidence, offering an executable and verifiable prototype for small-scale electronic voting scenarios.")
     add_para(doc, "Key words: decentralized voting; smart contract; Solidity; Merkle Tree; Ethereum; DApp", first_line=False, bold_prefix="Key words:")
     doc.add_page_break()
 
@@ -438,7 +438,7 @@ def add_body(doc: Document):
     add_para(doc, "从国内应用背景看，电子投票常出现在高校评选、社团决策、企业内部意见征集和线上活动评审等场景。这些场景通常规模有限，但对过程公开、结果可信和操作便捷有一定要求。本文系统面向这类教学和演示场景，将核心目标放在防重复投票、防非授权地址投票、链上公开计票和部署证据留存，而不直接处理政务选举中的实名身份核验、强匿名性和法律效力问题。")
     add_section_heading(doc, "1.3  研究目标与主要内容")
     add_para(doc, "本文的研究目标是设计并实现一个可运行、可部署、可测试、可追溯的去中心化电子投票系统。系统应支持管理员配置投票主题和候选项，支持使用地址白名单限制投票资格，支持选民通过钱包签名提交投票交易，支持合约自动拒绝非白名单地址、重复投票和超时投票，并支持前端读取链上结果。")
-    add_para(doc, "围绕上述目标，本文完成以下工作：第一，设计投票系统的角色、功能需求、非功能需求和威胁边界；第二，基于 Solidity 编写 VotingSystem 智能合约，并使用 OpenZeppelin MerkleProof 完成白名单验证；第三，使用 Hardhat 搭建编译、测试、部署和 Gas 统计流程；第四，使用 React、TypeScript、Ethers.js 和 MetaMask 实现前端 DApp；第五，在 Sepolia 测试网上重新部署合约并提交真实投票交易；第六，使用 Slither 完成合约静态分析并形成审计记录。")
+    add_para(doc, "围绕上述目标，本文完成以下工作：第一，设计投票系统的角色、功能需求、非功能需求和威胁边界；第二，基于 Solidity 编写 VotingSystem 智能合约，并使用 OpenZeppelin MerkleProof 完成白名单验证；第三，使用 Hardhat 搭建编译、测试、部署和 Gas 统计流程；第四，使用 React、TypeScript、Ethers.js 和 MetaMask 实现前端 DApp；第五，在 Sepolia 测试网上重新部署合约并同步前端配置；第六，使用 Slither 完成合约静态分析并形成审计记录。")
     add_section_heading(doc, "1.4  论文结构安排")
     add_para(doc, "全文共分为七章。第一章介绍研究背景、研究现状、研究目标和论文结构。第二章说明 Ethereum、Solidity、ECDSA、Keccak-256、Merkle Tree 和 DApp 钱包交互等相关技术。第三章给出系统需求分析和威胁模型。第四章描述系统总体架构、业务流程、投票流程、合约接口和前端模块。第五章介绍智能合约、白名单脚本、部署脚本和前端界面的具体实现。第六章给出测试结果、Gas 消耗、安全审计和 Sepolia 部署证据。第七章总结已完成工作并分析后续改进方向。")
     add_section_heading(doc, "1.5  技术路线与可行性分析")
@@ -641,9 +641,9 @@ def add_body(doc: Document):
     add_para(doc, "私钥管理是系统实践中的重要风险。项目部署使用测试网账户完成，私钥只应保存在本地 .env 文件中，不应提交到 GitHub。由于测试网私钥在调试过程中存在暴露可能，完成毕业设计材料后应更换部署钱包或放弃该测试账户，避免后续被他人使用。")
     add_picture(doc, FIG / "security-audit-summary.png", "图6.3  Slither 安全审计结果摘要", width=5.7)
     add_section_heading(doc, "6.5  Sepolia 测试网部署结果")
-    add_para(doc, "最新 Sepolia 合约地址为 0x6772e0193eAAA77cB89d135188f09e339C4dE66A，部署交易 Hash 为 0xd4a9205dc710acff89205baa79b7141634d9fef401679d5152ace233b03b7724。部署账户为 0x372ee50901D62F3b314936C9302b19F8F477716E，投票窗口约为 30 分钟。系统已使用部署账户完成一笔真实投票交易，交易 Hash 为 0x810ce83b69781f3980b1ba3c7ab0975948c16d87713a80d9432be76ea7e95321，区块高度为 10843573。")
-    add_para(doc, "重新部署合约的目的，是为论文材料提供当前项目状态下的最新链上证据。由于投票窗口被设置为约 30 分钟，旧合约在窗口结束后无法继续产生有效投票交易，因此需要重新部署以获得可演示的投票窗口和真实交易回执。部署完成后，前端配置文件被重新导出，确保页面中的合约地址与 Sepolia 上的最新实例一致。")
-    add_para(doc, "部署证据不仅包括合约地址，还包括部署交易 Hash、投票交易 Hash、部署账户、白名单根、Gas 消耗和前端读取截图。合约地址能够定位链上合约实例，交易 Hash 能够定位具体执行过程，Gas 消耗能够说明执行成本，截图能够证明前端已读取对应合约状态。这些材料互相印证，比单独给出一个地址更适合毕业设计验收。")
+    add_para(doc, "最新 Sepolia 合约地址为 0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b，部署交易 Hash 为 0x25e62cd381f298afd1fb1ed0676c3126658663dd8304f56bd434ded272dbfcb8。部署账户为 0x372ee50901D62F3b314936C9302b19F8F477716E，投票窗口约为 3 天，截止时间为北京时间 2026 年 5 月 27 日 11:14:02。")
+    add_para(doc, "重新部署合约的目的，是为公网部署和远程演示提供更充足的投票时间。与 30 分钟演示窗口相比，3 天窗口更适合让他人通过服务器访问前端并连接 Sepolia 钱包进行测试。部署完成后，前端配置文件被重新导出，确保页面中的合约地址与 Sepolia 上的最新实例一致。")
+    add_para(doc, "部署证据不仅包括合约地址，还包括部署交易 Hash、部署账户、白名单根、Gas 消耗和前端读取截图。合约地址能够定位链上合约实例，交易 Hash 能够定位具体执行过程，Gas 消耗能够说明执行成本，截图能够证明前端已读取对应合约状态。历史投票交易回执继续保留为既有链上证据，但不作为本次 3 天新合约的投票结果。")
     add_picture(doc, FIG / "deployment-evidence-table.png", "图6.4  Sepolia 部署证据表", width=5.9)
     add_picture(doc, SHOT / "system-home-chain-read.png", "图6.5  前端读取真实链上投票结果截图", width=4.8)
     add_section_heading(doc, "6.6  可复现性与结果评价")
@@ -687,9 +687,9 @@ def add_body(doc: Document):
     add_mono(doc, "npm install\nnpm run compile\nnpm test\nnpm run test:gas\nnpm run generate:whitelist\nnpm run deploy:sepolia\nnpm run export:frontend -- --network sepolia\nnpm run web:build\nslither . --filter-paths \"node_modules|artifacts|cache\"")
     add_section_heading(doc, "A.2  最新部署与交易证据")
     add_table(doc, ["字段", "内容"], [
-        ["合约地址", "0x6772e0193eAAA77cB89d135188f09e339C4dE66A"],
-        ["部署交易 Hash", "0xd4a9205dc710acff89205baa79b7141634d9fef401679d5152ace233b03b7724"],
-        ["投票交易 Hash", "0x810ce83b69781f3980b1ba3c7ab0975948c16d87713a80d9432be76ea7e95321"],
+        ["合约地址", "0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b"],
+        ["部署交易 Hash", "0x25e62cd381f298afd1fb1ed0676c3126658663dd8304f56bd434ded272dbfcb8"],
+        ["历史投票交易 Hash", "0x9bc1ed5d902a984f86215e2ce01ffd0e3b95b041a101b5edc5fadd9b6adf629e"],
         ["白名单根", "0xb84d167dee14c531723adc7c8625c29224727496b7a19329eda9cbc6d15c4a21"],
         ["测试结果", "24 passing"],
         ["Slither 审计", "3 条 timestamp 提示，均已解释"],

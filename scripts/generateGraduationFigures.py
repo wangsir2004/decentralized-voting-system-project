@@ -300,14 +300,14 @@ def build_gas_chart() -> None:
 def build_deployment_table() -> None:
     image, draw = make_canvas("Sepolia 部署证据表", 1600, 900)
     rows = [
-        ("合约地址", "0x6772e0193eAAA77cB89d135188f09e339C4dE66A"),
-        ("部署交易 Hash", "0xd4a9205dc710acff89205baa79b7141634d9fef401679d5152ace233b03b7724"),
-        ("投票交易 Hash", "0x810ce83b69781f3980b1ba3c7ab0975948c16d87713a80d9432be76ea7e95321"),
+        ("合约地址", "0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b"),
+        ("部署交易 Hash", "0x25e62cd381f298afd1fb1ed0676c3126658663dd8304f56bd434ded272dbfcb8"),
+        ("历史投票交易 Hash", "0x9bc1ed5d902a984f86215e2ce01ffd0e3b95b041a101b5edc5fadd9b6adf629e"),
         ("部署账户", "0x372ee50901D62F3b314936C9302b19F8F477716E"),
         ("白名单根", "0xb84d167dee14c531723adc7c8625c29224727496b7a19329eda9cbc6d15c4a21"),
         ("部署 Gas", "903,205"),
         ("投票 Gas", "74,413"),
-        ("投票窗口", "2026-05-13 14:46:55 至 15:16:55（约 30 分钟）"),
+        ("投票窗口", "2026-05-24 11:14:02 至 2026-05-27 11:14:02（约 3 天）"),
     ]
     x0, y0 = 90, 150
     for i, (key, value) in enumerate(rows):

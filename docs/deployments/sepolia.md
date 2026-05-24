@@ -7,15 +7,15 @@
 | 网络 | Sepolia |
 | 合约 | `VotingSystem` |
 | Chain ID | `11155111` |
-| 合约地址 | `0x7140ecD54bf13bdc7A56364755fa8DAbFD3C2E28` |
-| 部署交易 Hash | `0xa6b2bcfda0832e35ffe9f0e08781f3a25c551d4b16da586a0e42785841f62a86` |
+| 合约地址 | `0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b` |
+| 部署交易 Hash | `0x25e62cd381f298afd1fb1ed0676c3126658663dd8304f56bd434ded272dbfcb8` |
 | 部署账户 | `0x372ee50901D62F3b314936C9302b19F8F477716E` |
-| 部署时间 | `2026-05-24T02:18:26.689Z` |
-| 投票截止时间 | `2026-05-24T02:48:02.000Z` |
-| 投票窗口 | 约 30 分钟 |
+| 部署时间 | `2026-05-24T03:14:14.772Z` |
+| 投票截止时间 | `2026-05-27T03:14:02.000Z` |
+| 投票窗口 | 约 3 天 |
 | Merkle Root | `0xb84d167dee14c531723adc7c8625c29224727496b7a19329eda9cbc6d15c4a21` |
-| Etherscan 地址 | <https://sepolia.etherscan.io/address/0x7140ecD54bf13bdc7A56364755fa8DAbFD3C2E28> |
-| Etherscan 部署交易 | <https://sepolia.etherscan.io/tx/0xa6b2bcfda0832e35ffe9f0e08781f3a25c551d4b16da586a0e42785841f62a86> |
+| Etherscan 地址 | <https://sepolia.etherscan.io/address/0x506db4C4b9A63d127b3613AC87B2Cae3Fe185d2b> |
+| Etherscan 部署交易 | <https://sepolia.etherscan.io/tx/0x25e62cd381f298afd1fb1ed0676c3126658663dd8304f56bd434ded272dbfcb8> |
 
 ## 白名单地址
 
@@ -36,9 +36,11 @@
 | 成功投票 `vote` 最小值 | `73,654` | `npm run test:gas` | 白名单账户首次投票 |
 | 成功投票 `vote` 最大值 | `73,666` | `npm run test:gas` | 不同 proof 路径产生细微差异 |
 | 成功投票 `vote` 平均值 | `73,661` | `npm run test:gas` | 5 次测试调用平均值 |
-| Sepolia 成功投票 | `74,413` | 投票交易回执 | 白名单部署账户为方案 A 投票 |
+| Sepolia 成功投票（历史） | `74,413` | 投票交易回执 | 上一轮合约中白名单部署账户为方案 A 投票 |
 
-## 投票交易证据
+## 历史投票交易证据
+
+本次 3 天投票窗口的新合约尚未提交真实投票交易，避免占用白名单账户的投票机会。以下交易为上一轮部署中的历史投票回执，仅用于保留既有链上证据。
 
 | 项目 | 内容 |
 | --- | --- |

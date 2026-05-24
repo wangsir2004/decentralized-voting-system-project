@@ -11,7 +11,7 @@
 
 | 文件 | 修改内容 |
 | --- | --- |
-| `deployments/sepolia.json` | 更新为最新 Sepolia 合约地址、部署交易 Hash、部署 Gas 和 30 分钟投票窗口。 |
+| `deployments/sepolia.json` | 更新为最新 Sepolia 合约地址、部署交易 Hash、部署 Gas 和 3 天投票窗口。 |
 | `apps/web/public/deployment.json` | 同步前端运行所需的 ABI、合约地址和部署配置。 |
 | `docs/deployments/sepolia.md` | 更新最新部署记录、真实投票交易和 Etherscan 追溯链接。 |
 | `docs/security/slither-results.json` | 更新 Slither 最新审计 JSON 输出。 |
