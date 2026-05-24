@@ -1,12 +1,13 @@
 {
   "network": "sepolia",
   "chainId": 11155111,
-  "contractAddress": "0x6772e0193eAAA77cB89d135188f09e339C4dE66A",
+  "contractAddress": "0x7140ecD54bf13bdc7A56364755fa8DAbFD3C2E28",
   "voter": "0x372ee50901D62F3b314936C9302b19F8F477716E",
   "candidateIndex": 0,
   "candidateName": "方案 A：区块链投票系统",
-  "transactionHash": "0x810ce83b69781f3980b1ba3c7ab0975948c16d87713a80d9432be76ea7e95321",
+  "transactionHash": "0x9bc1ed5d902a984f86215e2ce01ffd0e3b95b041a101b5edc5fadd9b6adf629e",
+  "blockNumber": 10908830,
   "gasUsed": "74413",
-  "blockNumber": 10843573,
-  "submittedAt": "2026-05-13T06:49:00.957Z"
+  "status": 1,
+  "votedAt": "2026-05-24T02:21:05.487Z"
 }

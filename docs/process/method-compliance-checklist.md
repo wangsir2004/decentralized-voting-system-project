@@ -13,7 +13,7 @@
 | 合约安全规范 | 已补齐 | `VotingSystem.sol`、Checks-Effects-Interactions 分析 |
 | Slither 审计 | 已补齐 | `docs/security/slither-audit.md`、`docs/security/slither-results.json` |
 | Gas 记录 | 已补齐 | `npm run test:gas` 输出、部署记录 |
-| 部署文档同步 | 已完成 | 最新合约地址 `0x6772e0193eAAA77cB89d135188f09e339C4dE66A` |
+| 部署文档同步 | 已完成 | 最新合约地址 `0x7140ecD54bf13bdc7A56364755fa8DAbFD3C2E28` |
 | 阶段文档资料 | 已补齐 | `README.md`、`docs` 目录、测试清单、部署记录 |
 | 工程伦理与法律风险 | 基本满足 | 项目用于毕业设计演示，不涉及违法交易、资金托管或隐私数据上链 |
 
