@@ -3,6 +3,8 @@ pragma solidity ^0.8.24;
 
 import {MerkleProof} from "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
+// 单场投票合约只负责一场具体投票的规则校验、资格验证和链上计票。
+// 如果需要管理多场投票，由 VotingFactory 负责创建和登记多个 VotingSystem 实例。
 contract VotingSystem {
     // 投票主题、截止时间和 Merkle 根公开暴露，方便前端直接读取链上配置。
     string public title;
@@ -12,6 +14,7 @@ contract VotingSystem {
     // 候选项与票数按相同索引保存，避免额外映射带来的遍历成本。
     string[] private candidates;
     uint256[] private voteCounts;
+    // 记录地址是否已经投过票，防止同一钱包重复提交有效投票。
     mapping(address => bool) private voted;
 
     event VoteCreated(string title, uint256 votingEndTime, bytes32 merkleRoot);

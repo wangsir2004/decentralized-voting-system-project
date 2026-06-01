@@ -112,6 +112,14 @@ export function formatWalletError(error: unknown, fallback = "操作失败。") 
     return "候选项无效，请重新选择。";
   }
 
+  if (normalized.includes("only creator can archive election")) {
+    return "只有该投票的创建钱包可以归档或恢复这条记录。";
+  }
+
+  if (normalized.includes("election already registered")) {
+    return "该投票合约已经登记到平台，不需要重复登记。";
+  }
+
   if (normalized.includes("network") && normalized.includes("chain")) {
     return "当前钱包网络与合约网络不一致，请切换到 Sepolia 测试网。";
   }

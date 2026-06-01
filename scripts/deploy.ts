@@ -4,6 +4,7 @@ import { ethers, network } from "hardhat";
 
 type WhitelistFile = {
   merkleRoot: string;
+  voters: Array<{ address: string }>;
 };
 
 const BYTES32_PATTERN = /^0x[0-9a-fA-F]{64}$/;
@@ -48,15 +49,20 @@ async function main() {
   const votingEndTime = now + 3 * 24 * 60 * 60;
   const title = "基于智能合约的去中心化电子投票演示";
 
-  const VotingSystem = await ethers.getContractFactory("VotingSystem");
+  const VotingFactory = await ethers.getContractFactory("VotingFactory");
   const [deployerSigner] = await ethers.getSigners();
-  const voting = await VotingSystem.deploy(title, candidates, votingEndTime, merkleRoot);
-  await voting.waitForDeployment();
+  const votingFactory = await VotingFactory.deploy();
+  await votingFactory.waitForDeployment();
 
-  const address = await voting.getAddress();
-  const deploymentTx = voting.deploymentTransaction();
-  const receipt = deploymentTx ? await deploymentTx.wait() : null;
+  const factoryAddress = await votingFactory.getAddress();
+  const factoryDeploymentTx = votingFactory.deploymentTransaction();
+  const factoryReceipt = factoryDeploymentTx ? await factoryDeploymentTx.wait() : null;
   const deployer = await deployerSigner.getAddress();
+  const voterAddresses = whitelist.voters.map((entry) => entry.address);
+  const createTx = await votingFactory.createElection(title, candidates, votingEndTime, merkleRoot, voterAddresses);
+  const createReceipt = await createTx.wait();
+  const electionRecord = await votingFactory.getElection(0);
+  const address = electionRecord.election;
 
   // 输出文件同时服务部署追踪和前端读取，字段保持显式便于论文与验收截图引用。
   const output = {
@@ -69,8 +75,11 @@ async function main() {
     candidates,
     votingEndTime,
     merkleRoot,
-    deploymentTransactionHash: deploymentTx?.hash || "",
-    deploymentGasUsed: receipt?.gasUsed?.toString() || "",
+    deploymentTransactionHash: createTx.hash || "",
+    deploymentGasUsed: createReceipt?.gasUsed?.toString() || "",
+    factoryAddress,
+    factoryDeploymentTransactionHash: factoryDeploymentTx?.hash || "",
+    factoryDeploymentGasUsed: factoryReceipt?.gasUsed?.toString() || "",
     deployedAt: new Date().toISOString()
   };
 
@@ -79,7 +88,8 @@ async function main() {
   // 统一落盘到 deployments/{network}.json，再由 exportFrontendArtifact 同步给前端。
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2) + "\n", "utf8");
 
-  console.log(`投票智能合约已部署到：${address}`);
+  console.log(`投票平台工厂合约已部署到：${factoryAddress}`);
+  console.log(`默认投票智能合约已创建到：${address}`);
   console.log(`部署记录已保存到：${outputPath}`);
 }
 

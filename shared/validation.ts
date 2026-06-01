@@ -10,6 +10,10 @@ export type DeploymentResource = {
   merkleRoot: string;
   deploymentTransactionHash: string;
   deploymentGasUsed: string;
+  factoryAddress?: string;
+  factoryDeploymentTransactionHash?: string;
+  factoryDeploymentGasUsed?: string;
+  factoryAbi?: unknown[];
   deployedAt: string;
   abi: unknown[];
 };
@@ -83,7 +87,9 @@ export function validateDeploymentConfig(value: unknown): DeploymentResource {
   const chainId = value.chainId;
   const votingEndTime = value.votingEndTime;
   const abi = value.abi;
+  const factoryAbi = value.factoryAbi;
   const deployer = optionalString(value, "deployer");
+  const factoryAddress = optionalString(value, "factoryAddress");
 
   if (typeof chainId !== "number" || !Number.isInteger(chainId) || chainId <= 0) {
     throw new Error("链编号无效。");
@@ -95,6 +101,14 @@ export function validateDeploymentConfig(value: unknown): DeploymentResource {
 
   if (!Array.isArray(abi)) {
     throw new Error("合约 ABI 无效。");
+  }
+
+  if (factoryAddress && !ADDRESS_PATTERN.test(factoryAddress)) {
+    throw new Error("平台工厂合约地址无效。");
+  }
+
+  if (factoryAbi !== undefined && !Array.isArray(factoryAbi)) {
+    throw new Error("平台工厂 ABI 无效。");
   }
 
   if (deployer && !ADDRESS_PATTERN.test(deployer)) {
@@ -113,6 +127,10 @@ export function validateDeploymentConfig(value: unknown): DeploymentResource {
     merkleRoot: requireBytes32(value.merkleRoot, "默克尔根"),
     deploymentTransactionHash: optionalString(value, "deploymentTransactionHash"),
     deploymentGasUsed: optionalString(value, "deploymentGasUsed"),
+    factoryAddress,
+    factoryDeploymentTransactionHash: optionalString(value, "factoryDeploymentTransactionHash"),
+    factoryDeploymentGasUsed: optionalString(value, "factoryDeploymentGasUsed"),
+    factoryAbi: Array.isArray(factoryAbi) ? factoryAbi : undefined,
     deployedAt: optionalString(value, "deployedAt"),
     abi
   };

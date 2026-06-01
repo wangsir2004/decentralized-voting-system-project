@@ -31,7 +31,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -112,6 +113,21 @@ input {
   font-weight: 800;
 }
 
+.hud-action {
+  border: 1px solid var(--primary-strong);
+  border-radius: 999px;
+  background: rgba(170, 116, 71, 0.22);
+  color: #fff3e4;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.hud-action:hover {
+  background: rgba(209, 150, 98, 0.28);
+}
+
 .panel {
   position: relative;
   overflow: hidden;
@@ -153,6 +169,7 @@ input {
 .hero-intro,
 .chain-map,
 .contract-terminal,
+.admin-panel,
 .operation-panel,
 .chart-panel,
 .evidence-panel,
@@ -160,6 +177,176 @@ input {
 .security-panel,
 .loading-panel {
   padding: 22px;
+}
+
+.admin-panel {
+  margin-top: 18px;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.admin-form,
+.admin-summary,
+.candidate-editor,
+.import-existing {
+  display: grid;
+  gap: 12px;
+}
+
+.import-existing {
+  border-top: 1px solid var(--line-soft);
+  padding-top: 12px;
+}
+
+.contract-manager {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--panel-muted);
+  padding: 12px;
+}
+
+.contract-card {
+  display: grid;
+  gap: 8px;
+}
+
+.compact-heading {
+  margin-bottom: 4px;
+}
+
+.contract-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #292521;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 12px;
+  text-align: left;
+}
+
+.contract-row:hover {
+  border-color: var(--primary-strong);
+  background: #302923;
+}
+
+.contract-row span,
+.contract-row small,
+.contract-row b {
+  display: block;
+  min-width: 0;
+}
+
+.contract-row b {
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.contract-row small {
+  margin-top: 5px;
+  color: var(--subtle);
+  overflow-wrap: anywhere;
+}
+
+.contract-row strong {
+  color: var(--teal);
+  white-space: nowrap;
+}
+
+.contract-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.contract-actions .secondary-button {
+  min-height: 36px;
+  padding: 8px 11px;
+  font-size: 12px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field span {
+  color: var(--primary-strong);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--panel-muted);
+  color: var(--text);
+  padding: 11px 12px;
+  outline: none;
+}
+
+.form-field textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: var(--primary-strong);
+  box-shadow: 0 0 0 3px rgba(209, 150, 98, 0.14);
+}
+
+.candidate-editor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.secondary-button,
+.ghost-button {
+  min-height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 900;
+}
+
+.secondary-button {
+  border: 1px solid var(--line);
+  background: var(--panel-soft);
+  color: var(--muted);
+}
+
+.ghost-button {
+  border: 1px solid var(--line-soft);
+  background: transparent;
+  color: var(--primary-strong);
+}
+
+.ghost-button:disabled {
+  cursor: not-allowed;
+  color: var(--subtle);
+}
+
+.export-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .hero-intro,
@@ -735,6 +922,10 @@ h2 {
     min-height: auto;
   }
 
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
   .chain-map {
     min-height: 520px;
   }
@@ -781,6 +972,7 @@ h2 {
   .hero-intro,
   .chain-map,
   .contract-terminal,
+  .admin-panel,
   .operation-panel,
   .chart-panel,
   .evidence-panel,

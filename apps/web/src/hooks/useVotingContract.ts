@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { BrowserProvider, Contract, JsonRpcProvider } from "ethers";
-import { assertMatchingMerkleRoot, loadWhitelist, type DeploymentConfig } from "../contracts/deployment";
+import { assertMatchingMerkleRoot, loadWhitelistForDeployment, type DeploymentConfig } from "../contracts/deployment";
 import { formatWalletError } from "../utils/display";
 
 export type VotingState = {
@@ -47,7 +47,7 @@ export function useVotingContract(deployment: DeploymentConfig | null, account: 
     setState((current) => ({ ...current, isLoading: true, error: "" }));
 
     try {
-      const whitelist = await loadWhitelist();
+      const whitelist = await loadWhitelistForDeployment(deployment);
       assertMatchingMerkleRoot(deployment, whitelist);
       // 白名单文件里的地址已规范化，这里再用小写比较兼容钱包返回的 checksum 地址。
       const entry = account
@@ -55,11 +55,11 @@ export function useVotingContract(deployment: DeploymentConfig | null, account: 
         : undefined;
 
       const readOnlyRpcUrl = READONLY_RPC_BY_CHAIN_ID[deployment.chainId];
-      const provider = window.ethereum
-        ? new BrowserProvider(window.ethereum)
-        : readOnlyRpcUrl
+      const provider = readOnlyRpcUrl
           ? new JsonRpcProvider(readOnlyRpcUrl, deployment.chainId)
-          : null;
+          : window.ethereum
+            ? new BrowserProvider(window.ethereum)
+            : null;
 
       if (!provider) {
         // 没有钱包且缺少只读 RPC 时仍展示部署候选项和本地白名单状态。
